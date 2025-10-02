@@ -11,6 +11,7 @@ export const InputDefault = ({ type, labelText, ...rest }: InputDefaultProps) =>
             {labelText && labelText}
             <input 
                 type={type}
+                className={styles.input}
                 {...rest}
             />
         </label>
