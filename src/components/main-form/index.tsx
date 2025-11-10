@@ -7,6 +7,7 @@ import type { TaskModel } from "../../models/task-model"
 import { useTaskContext } from "../../contexts/task-context/useTaskContext"
 import { getNextCicle } from "../../utils/get-next-cicle"
 import { getNextCycleType } from "../../utils/get-nex-cycle-type"
+import { formatSecondsToMonutes } from "../../utils/formate-seconds-to-minutes"
 
 export const MainForm = () => {
 
@@ -17,12 +18,12 @@ export const MainForm = () => {
     const nextCycle = getNextCicle(state.currentCicle)
     const nextCycleType = getNextCycleType(nextCycle)
 
-    const handleCreateNewTask = async(e: React.FormEvent) => {
+    const handleCreateNewTask = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        if(taskName.length === 0) return
+        if (taskName.length === 0) return
 
-        if (!taskName.trim()){
+        if (!taskName.trim()) {
             alert("digite o nome da tarefa")
             return
         }
@@ -33,20 +34,20 @@ export const MainForm = () => {
             startDate: Date.now(),
             completeDate: null,
             interuptDate: null,
-            duration: 1,
-            type: nextCycleType 
+            duration: state.config[nextCycleType],
+            type: nextCycleType
         }
 
         const secondsRemaining = newTask.duration * 60
 
         setState(prevState => {
-            return{
+            return {
                 ...prevState,
                 config: { ...prevState.config },
                 activeTask: newTask,
                 currentCicle: nextCycle, //mexer depois
                 secondsRemaining,
-                formatedSecondsRemaining: "00:00",
+                formatedSecondsRemaining: formatSecondsToMonutes(secondsRemaining),
                 tasks: [...prevState.tasks, newTask]
             }
         })
