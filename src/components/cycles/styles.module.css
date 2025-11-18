@@ -19,14 +19,14 @@
     height: 2rem;
 }
 
-.work_time{
+.workTime{
     background-color: var(--warning);
 }
 
-.short_break_time{
+.shortBreakTime{
     background-color: var(--primary);
 }
 
-.long_break_time {
+.longBreakTime {
     background-color: var(--info)
 }
