@@ -1,4 +1,4 @@
-import { PlayCircleIcon } from "lucide-react"
+import { PlayCircleIcon, StopCircleIcon } from "lucide-react"
 import { Cycles } from "../cycles"
 import { ButtonDefault } from "../default-button"
 import { InputDefault } from "../default-input"
@@ -7,22 +7,19 @@ import type { TaskModel } from "../../models/task-model"
 import { useTaskContext } from "../../contexts/task-context/useTaskContext"
 import { getNextCicle } from "../../utils/get-next-cicle"
 import { getNextCycleType } from "../../utils/get-nex-cycle-type"
-import { formatSecondsToMonutes } from "../../utils/formate-seconds-to-minutes"
+import { TaskActionsTypes } from "../../contexts/task-context/task-actions"
 
 export const MainForm = () => {
-
     const [taskName, setTaskName] = useState<string>("")
 
-    const { state, setState } = useTaskContext()
+    const { state, dispatch } = useTaskContext()
 
     const nextCycle = getNextCicle(state.currentCicle)
     const nextCycleType = getNextCycleType(nextCycle)
 
     const handleCreateNewTask = async (e: React.FormEvent) => {
         e.preventDefault()
-
         if (taskName.length === 0) return
-
         if (!taskName.trim()) {
             alert("digite o nome da tarefa")
             return
@@ -37,21 +34,14 @@ export const MainForm = () => {
             duration: state.config[nextCycleType],
             type: nextCycleType
         }
+        
+        dispatch({ type: TaskActionsTypes.START_TASK, payload: newTask })
 
-        const secondsRemaining = newTask.duration * 60
+    }
 
-        setState(prevState => {
-            return {
-                ...prevState,
-                config: { ...prevState.config },
-                activeTask: newTask,
-                currentCicle: nextCycle, //mexer depois
-                secondsRemaining,
-                formatedSecondsRemaining: formatSecondsToMonutes(secondsRemaining),
-                tasks: [...prevState.tasks, newTask]
-            }
-        })
-
+    const handleInterruptTask = () => {
+        if(!state.activeTask) return state
+        dispatch({ type: TaskActionsTypes.INTERRUPT_TASK })
     }
 
     return (
@@ -63,6 +53,7 @@ export const MainForm = () => {
                     placeholder="Digite algo"
                     value={taskName}
                     onChange={e => setTaskName(e.target.value)}
+                    disabled={!!state.activeTask}
                 />
             </div>
 
@@ -77,9 +68,26 @@ export const MainForm = () => {
             )}
 
             <div className="formRow">
-                <ButtonDefault
-                    icon={<PlayCircleIcon />}
-                />
+                {!state.activeTask ? (
+                    <ButtonDefault
+                        icon={<PlayCircleIcon />}
+                        aria-label="Iniciar nova tarefa"
+                        title="Iniciar nova tarefa"
+                        type="submit"
+                        key={1}
+                    />
+                ) : state.activeTask &&
+                (
+                    <ButtonDefault
+                        icon={<StopCircleIcon />}
+                        aria-label="Interromper tarefa atual"
+                        title="Interromper tarefa atual"
+                        type="button"
+                        color="red"
+                        onClick={handleInterruptTask}
+                        key={2}
+                    />
+                )}
             </div>
         </form>
     )
