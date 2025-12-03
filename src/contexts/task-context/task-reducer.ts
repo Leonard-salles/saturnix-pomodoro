@@ -16,7 +16,7 @@ export const taskReducer = (
             return {
                 ...state,
                 activeTask: action.payload,
-                currentCycle: nextCycle,
+                currentCicle: nextCycle,
                 secondsRemaining: secondsRemaining,
                 formatedSecondsRemaining: formatSecondsToMonutes(secondsRemaining), 
                 tasks: [...state.tasks, action.payload]
@@ -33,7 +33,7 @@ export const taskReducer = (
                     if(state.activeTask && state.activeTask.id == task.id){
                         return {...task, interuptDate: Date.now()}
                     }
-                    return state
+                    return task
                 })
             }
         }
