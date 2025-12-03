@@ -3,8 +3,6 @@ import { TaskContext } from "./taskContext"
 import { initialState } from "./initialState"
 import { taskReducer } from "./task-reducer"
 
-
-
 type TaskStateProviderProps = {
     children: React.ReactNode,
 }
