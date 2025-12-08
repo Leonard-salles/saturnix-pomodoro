@@ -8,6 +8,7 @@ import { useTaskContext } from "../../contexts/task-context/useTaskContext"
 import { getNextCicle } from "../../utils/get-next-cicle"
 import { getNextCycleType } from "../../utils/get-nex-cycle-type"
 import { TaskActionsTypes } from "../../contexts/task-context/task-actions"
+import { Tips } from "../Tips"
 
 export const MainForm = () => {
     const [taskName, setTaskName] = useState<string>("")
@@ -58,7 +59,7 @@ export const MainForm = () => {
             </div>
 
             <div className="formRow">
-                <p>Próximo intervalo é de 25min</p>
+              <Tips nextCicle={nextCycleType}/>
             </div>
 
             {state.currentCicle > 0 && (
