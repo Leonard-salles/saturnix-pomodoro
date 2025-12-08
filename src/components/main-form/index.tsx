@@ -59,7 +59,7 @@ export const MainForm = () => {
             </div>
 
             <div className="formRow">
-              <Tips nextCicle={nextCycleType}/>
+              <Tips nextCycle={nextCycleType}/>
             </div>
 
             {state.currentCicle > 0 && (
